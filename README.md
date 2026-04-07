@@ -1,316 +1,264 @@
-## hearty-datetime-helper [![NPM version](https://img.shields.io/npm/v/hearty-datetime-helper.svg)](https://www.npmjs.com/package/hearty-datetime-helper)
-Hearty datetime helper is a small library that can provide small helper functions useful for date and time.getMonthNameWithOrdinal, strToDate, isToday, daysdiff, etc,.
+# hearty-datetime-helper
 
+A lightweight TypeScript utility library providing comprehensive date and time helper functions. Zero dependencies.
 
-# Installation
+## Tech Stack
 
-npm i hearty-datetime-helper
+| Tool       | Purpose            |
+| ---------- | ------------------ |
+| TypeScript | Language           |
+| tsup       | Build (CJS + ESM)  |
+| Vitest     | Testing            |
+| Node 18+   | Runtime            |
 
+## Installation
 
-# Usage
-
-var heartyDateTimeHelper = require('heartyDateTimehelper')
-
-
-## getMonthNameWithOrdinal
-
-Return the Month name for given ordinal
-```javascript
-
-    var input = 6
-    
-    heartyDateTimeHelper.getMonthNameWithOrdinal(input)
-    Output: "June"
-
+```bash
+npm install hearty-datetime-helper
 ```
 
+## Usage
 
+```ts
+// ESM
+import { formatDate, isToday, addDays, toRelativeTime } from "hearty-datetime-helper";
 
-## strToDate
-
-Returns the date in the given valid format (Please provide valid input date) & if no output format is provided, output will return in default date format
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd
-```javascript
-
-    var input = ('21/10/2018','yyyy-mm-dd')
-
-    heartyDateTimeHelper.strToDate(input)
-    Output: "2018-10-21"
-
+// CommonJS
+const { formatDate, isToday, addDays, toRelativeTime } = require("hearty-datetime-helper");
 ```
 
+## API Reference
 
+### Original Functions
 
-## isToday
-
-If we provided valid date in supported format, it will return true or false if the input is today
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd || new Date()
-```javascript
-
-    var input = '21-10-2018'
-
-    heartyDateTimeHelper.isToday(input)
-    Output: false
-
+#### `getMonthNameWithOrdinal(ordinal: number | string): string`
+Returns the full month name for a given month ordinal (1-12).
+```ts
+getMonthNameWithOrdinal(6)  // "June"
 ```
 
-
-
-## daysdiffFromToday
-
-Takes the input of valid date, it return days difference from input date & today's date
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd || new Date()
-```javascript
-
-    var input = '28/10/2018'
-
-    heartyDateTimeHelper.daysdiffFromToday(input)
-    Output: 5        
-
+#### `strToDate(dt: DateInput, format?: string | false): Date | string`
+Converts a date string to a Date object, optionally formatting the output.
+Supports: `dd/mm/yyyy`, `dd-mm-yyyy`, `yyyy/mm/dd`, `yyyy-mm-dd`, epoch timestamps, and Date objects.
+```ts
+strToDate("21/10/2018", "yyyy-mm-dd")  // "2018-10-21"
+strToDate("21-10-2018")                 // Date object
 ```
 
-
-
-## daysdiff
-
-Returns difference between dates you provided, If we provide today date also like 'new Date()', It will convert to same format will return the result 
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd
-```javascript
-
-    var input = (new Date(), '2018-11-22')
- 
-    heartyDateTimeHelper.daysdiff(input)
-    Output: 21      
-
+#### `isToday(dt: DateInput): boolean`
+Checks if the given date is today.
+```ts
+isToday(new Date())     // true
+isToday("21-10-2018")   // false
 ```
 
-
-
-## formatMinutes
-
-Returns the number of minutes in HH:MM format from the given input
-```javascript
-
-    var input = 1760
- 
-    heartyDateTimeHelper.formatMinutes(input)
-    Output: "29:20 hrs"     
-
+#### `daysdiffFromToday(dt: DateInput): number`
+Returns the number of days between the given date and today.
+```ts
+daysdiffFromToday("28/10/2025")  // days until that date
 ```
 
-
-
-## handleDisplayDigit
-
-If the given input is less than 10, it will append 0 before the number
-```javascript
-
-    var input = 4
- 
-    heartyDateTimeHelper.handleDisplayDigit(input)
-    Output: 04    
-
+#### `daysdiff(dt1: DateInput, dt2: DateInput): number`
+Returns the number of days between two dates.
+```ts
+daysdiff("21/10/2018", "28/10/2018")  // 7
 ```
 
-
-
-## getDuration
-
-It will return the duration in the form of object. It will return years, months, days, hours, minutes and   seconds. 
-```javascript
-
-    var input = ('22/10/2018', '28/11/2018')
- 
-    heartyDateTimeHelper.getDuration(input)
-    Output: { day: "06", displayDiff: "01mo 06d", duration: 3196800, hour: "00", minute: "00", month: "01", second: "00", year: "00"}   
-
+#### `formatMinutes(time: number | string): string`
+Formats a number of minutes into `HH:MM hrs` format.
+```ts
+formatMinutes(150)  // "02:30 hrs"
 ```
 
-
-
-## displayDate
-
-It will return the date in string format, such as "Mon, 22 Oct". If we mention year parameter true, It will add year also output.
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd
-```javascript
-
-    var input = '22/10/2018'
- 
-    heartyDateTimeHelper.displayDate(input)
-    Output: "Mon, 22 Oct 2018"  
-
+#### `handleDisplayDigit(value: number): string`
+Pads a number with a leading zero if less than 10.
+```ts
+handleDisplayDigit(4)   // "04"
+handleDisplayDigit(12)  // "12"
 ```
 
-
-
-## getDayFromDate
-
-It will return the day name from given date.
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd
-```javascript
-
-    var input = '22/10/2016'
- 
-    heartyDateTimeHelper.getDayFromDate(input)
-    Output: "Sat"
-
+#### `getDuration(startTime: DateInput, endTime: DateInput): DurationResult`
+Calculates the duration between two date/time values.
+```ts
+getDuration("22/10/2018", "28/11/2018")
+// { year: "00", month: "01", day: "06", ... displayDiff: "01mo 06d" }
 ```
 
-
-
-## getMonthFromDate
-
-It will return the day name from given date.
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd
-```javascript
-
-    var input = '22/10/2016'
- 
-    heartyDateTimeHelper.getDayFromDate(input)
-    Output: "Sat"
-
+#### `displayDate(dt: DateInput, year?: boolean): string`
+Displays a date as a human-readable string.
+```ts
+displayDate("22/10/2018")        // "Mon, 22 Oct"
+displayDate("22/10/2018", true)  // "Mon, 22 Oct 2018"
 ```
 
-
-
-## isPastDate
-
-It will return true if provided date is past date or will return false if it's not
-support input formats : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd
-```javascript
-
-    var input = '22-10-2020'
- 
-    heartyDateTimeHelper.isPastDate(input)
-    Output: false
-
+#### `getDayFromDate(dt: DateInput): string`
+Returns the short day name from a given date.
+```ts
+getDayFromDate("22/10/2018")  // "Mon"
 ```
 
-
-
-## formatDate
-
-It will return formated date to provided format from the input date
-support patterns : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd
-```javascript
-
-    var input = ('22/10/2016', 'yyyy/mm/dd')
- 
-    heartyDateTimeHelper.formatDate(input)
-    Output: "2016/10/22"
-
+#### `getMonthFromDate(dt: DateInput): string`
+Returns the short month name from a given date.
+```ts
+getMonthFromDate("22/10/2018")  // "Oct"
 ```
 
-
-
-## getDaysAhead
-
-It will return the date days ahead of given date with the provided format.
-support patterns : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd || new Date()
-```javascript
-
-    var input = ('22/10/2016', 20, 'yyyy/mm/dd')
- 
-    heartyDateTimeHelper.getDaysAhead(input)
-    Output: "2016/11/11"
-
+#### `isPastDate(dt: DateInput): boolean`
+Checks if a given date is in the past.
+```ts
+isPastDate("22/10/2016")  // true
 ```
 
-
-
-## numberOfDays
-
-It will return the number of days present in given month of given year
-```javascript
-
-    var input = (2, 2012)
- 
-    heartyDateTimeHelper.numberOfDays(input)
-    Output: 29
-
+#### `formatDate(date: DateInput, pattern: string): string`
+Formats a date according to a pattern string.
+Tokens: `d`, `dd`, `ddd`, `dddd`, `m`, `mm`, `mmm`, `mmmm`, `yy`, `yyyy`, `h`, `hh`, `H`, `HH`, `M`, `MM`, `s`, `ss`, `t`, `tt`, `T`, `TT`
+```ts
+formatDate("22/10/2016", "yyyy/mm/dd")  // "2016/10/22"
 ```
 
-
-
-## getDaysBehind
-
-It will return the date days behind of given date with the provided format.
-```javascript
-
-    var input = ('22/10/2016', 20, 'yyyy/mm/dd')
- 
-    heartyDateTimeHelper.getDaysBehind(input)
-    Output: "02-10-2016"
-
+#### `getDaysAhead(dt: DateInput, days: number, as?: string): Date | string`
+Returns a date that is N days ahead of the given date.
+```ts
+getDaysAhead("22/10/2016", 20, "yyyy/mm/dd")  // "2016/11/11"
 ```
 
-
-
-## isDateInBetween
-
-It will return if the given date is between provided date limits
-support patterns : dd/mm/yyyy || dd-mm-yyyy || yyyy/mm/dd || yyyy-mm-dd || new Date()
-```javascript
-
-    var input = ('20/03/2018', new Date(), '21/06/2018')
- 
-    heartyDateTimeHelper.isDateInBetween(input)
-    Output: true
-
+#### `numberOfDays(m: number, y: number): number`
+Returns the number of days in a given month/year.
+```ts
+numberOfDays(2, 2024)  // 29
 ```
 
-
-
-## getDateWithOrdinal
-
-It will return date value with ordinal if we provide number as input
-```javascript
-
-    var input = 23
- 
-    heartyDateTimeHelper.getDateWithOrdinal(input)
-    Output: '23rd'
-
+#### `getDaysBehind(dt: DateInput, days: number, as?: string): Date | string`
+Returns a date that is N days behind the given date.
+```ts
+getDaysBehind("22/10/2016", 20, "yyyy/mm/dd")  // "2016/10/02"
 ```
 
-
-
-## getDateFromTimeStamp 
-
-It will return the converted date from given Unix epoch time input
-```javascript
-
-    var input = 1541658537
- 
-    heartyDateTimeHelper.getDateFromTimeStamp(input)
-    Output: "8th Nov, 2018"
-
+#### `isDateInBetween(startDate: DateInput, endDate: DateInput, dateToCheck: DateInput): boolean`
+Checks if a date falls between two other dates (inclusive).
+```ts
+isDateInBetween("01/01/2020", "31/12/2020", "15/06/2020")  // true
 ```
 
-
-
-## getConvertedEpochdate
-
-It will return the converted Unix epoch time date from given Unix epoch time input
-```javascript
-
-    var input = 1541658537
- 
-    heartyDateTimeHelper.getConvertedEpochdate(input)
-    Output: 1541658537000
-
+#### `getDateWithOrdinal(date: number): string`
+Returns a number with its ordinal suffix.
+```ts
+getDateWithOrdinal(23)  // "23rd"
 ```
 
-
-
-## getTodaydate
-
-It will return today's date in dd/mm/yyyy format
-```javascript
-
-    no input
- 
-    heartyDateTimeHelper.getTodaydate(input)
-    Output: "08/11/2018"
- 
+#### `getDateFromTimeStamp(dateInput: number, onlyText?: boolean): string | undefined`
+Converts a Unix epoch timestamp to a human-readable date string.
+```ts
+getDateFromTimeStamp(1541658537)  // "8th Nov, 2018"
 ```
+
+#### `getConvertedEpochdate(inputtext: number): number | false`
+Converts various epoch timestamp formats to milliseconds.
+```ts
+getConvertedEpochdate(1541658537)  // 1541658537000
+```
+
+#### `getTodaydate(): string`
+Returns today's date formatted as `dd/mm/yyyy`.
+```ts
+getTodaydate()  // "07/04/2026"
+```
+
+### New Functions (v2.0)
+
+#### `toRelativeTime(date: DateInput): string`
+Returns a human-readable relative time string.
+```ts
+toRelativeTime(new Date(Date.now() - 3600000))  // "1 hour ago"
+toRelativeTime(new Date(Date.now() + 86400000 * 3))  // "in 3 days"
+```
+
+#### `startOfDay(date: DateInput): Date` / `endOfDay(date: DateInput): Date`
+Set time to start (00:00:00.000) or end (23:59:59.999) of the day.
+
+#### `startOfMonth(date: DateInput): Date` / `endOfMonth(date: DateInput): Date`
+Set date to first or last day of the month.
+
+#### `startOfYear(date: DateInput): Date` / `endOfYear(date: DateInput): Date`
+Set date to Jan 1 or Dec 31 of the year.
+
+#### `isSameDay(date1: DateInput, date2: DateInput): boolean`
+Checks if two dates fall on the same calendar day.
+
+#### `isWeekend(date: DateInput): boolean` / `isWeekday(date: DateInput): boolean`
+Checks if a date is a weekend or weekday.
+
+#### `isLeapYear(year: number): boolean`
+Checks if a year is a leap year.
+
+#### `getQuarter(date: DateInput): number`
+Returns the quarter (1-4) for a given date.
+
+#### `addDays(date, days)` / `addMonths(date, months)` / `addYears(date, years)`
+Returns a new Date with the specified amount added.
+
+#### `subtractDays(date, days)` / `subtractMonths(date, months)` / `subtractYears(date, years)`
+Returns a new Date with the specified amount subtracted.
+
+#### `getAge(birthDate: DateInput): number`
+Calculates age in years from a birth date.
+
+#### `getWeekNumber(date: DateInput): number`
+Returns the ISO 8601 week number.
+
+#### `toUTC(date: DateInput): Date` / `fromUTC(date: DateInput): Date`
+Converts between local and UTC dates.
+
+#### `formatDuration(ms: number): string`
+Formats milliseconds to a human-readable duration string.
+```ts
+formatDuration(9015000)  // "2h 30m 15s"
+```
+
+#### `getCalendarDays(month: number, year: number): Date[]`
+Returns an array of dates for a calendar month view (padded to complete weeks).
+
+#### `isValidDate(value: unknown): boolean`
+Checks if a value is a valid Date object.
+
+#### `parseISO(isoString: string): Date`
+Parses an ISO 8601 string to a Date object.
+
+#### `diffInHours(date1, date2)` / `diffInMinutes(date1, date2)` / `diffInSeconds(date1, date2)`
+Returns the difference between two dates in the specified unit.
+
+## Types
+
+```ts
+type DateInput = Date | string | number;
+
+interface DurationResult {
+  year: string;
+  month: string;
+  day: string;
+  hour: string;
+  minute: string;
+  second: string;
+  displayDiff: string;
+  duration: number;
+}
+```
+
+## Migration from v1
+
+- **Breaking**: Package is now ESM-first with CJS fallback.
+- **Breaking**: Version bumped to 2.0.0.
+- All original function names and signatures are preserved.
+- TypeScript types are now included (`*.d.ts`).
+- Import style changed from `require()` to `import` (CJS still supported).
+
+```diff
+- var helper = require('hearty-datetime-helper');
+- helper.isToday('21-10-2018');
++ import { isToday } from 'hearty-datetime-helper';
++ isToday('21-10-2018');
+```
+
+## License
+
+ISC

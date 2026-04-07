@@ -1,19 +1,63 @@
 {
   "name": "hearty-datetime-helper",
-  "version": "1.1.1",
-  "description": "Hearty datetime helper is a small library that can provide small helper functions useful for date and time.",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "A lightweight TypeScript utility library providing comprehensive date and time helper functions.",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SrinivasNarayansetty/hearty-datetime-helper.git"
   },
-  "author": "“Srinivas <“srinivas69cse@gmail.com”> (http://srinivasnarayansetty.com/)",
+  "author": "Srinivas N <srinivas69cse@gmail.com> (http://srinivasnarayansetty.com/)",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/SrinivasNarayansetty/hearty-datetime-helper/issues"
   },
-  "homepage": "https://github.com/SrinivasNarayansetty/hearty-datetime-helper#readme"
+  "homepage": "https://github.com/SrinivasNarayansetty/hearty-datetime-helper#readme",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.1.0"
+  },
+  "keywords": [
+    "hearty-datetime-helper",
+    "date",
+    "time",
+    "datetime",
+    "utility",
+    "helper",
+    "typescript",
+    "lightweight",
+    "date-utils",
+    "time-utils"
+  ]
 }
